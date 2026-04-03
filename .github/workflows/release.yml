@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Generate release tag
         id: release_tag
-        run: echo "nowDATE=$(date +'%Y-%m-%d_%H:%M:%S')" >> $GITHUB_ENV
+        run: echo "nowDATE=$(date +'v%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
       - uses: actions/checkout@v3
       - name: ci
