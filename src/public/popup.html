@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abema Timetable</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <p class="eyebrow">Abema Timetable</p>
+        <h1>非表示にするチャンネル</h1>
+        <p id="status" class="status">読み込み中...</p>
+      </header>
+
+      <div class="toolbar">
+        <button id="refresh-button" type="button">再読み込み</button>
+        <button id="clear-button" type="button" class="secondary">すべて表示</button>
+      </div>
+
+      <div id="channel-list" class="channel-list" aria-live="polite"></div>
+    </main>
+
+    <script src="./popup.js" defer></script>
+  </body>
+</html>

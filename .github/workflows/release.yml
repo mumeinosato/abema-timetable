@@ -1,0 +1,48 @@
+name: build and release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.step_version.outputs.version }}
+      upload_url: ${{ steps.step_upload_url.outputs.upload_url }}
+    steps:
+      - name: Generate release tag
+        id: release_tag
+        env:
+          TZ: 'Asia/Tokyo'
+        run: echo "nowDATE=$(date +'%Y-%m-%d_%H:%M:%S')" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v3
+      - name: ci
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Zip output
+        run: zip -r ${{ env.nowDATE }}.zip dist
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.nowDATE }}.zip
+          asset_name: ${{ env.nowDATE }}.zip
+          asset_content_type: application/zip
